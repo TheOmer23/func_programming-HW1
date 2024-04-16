@@ -29,21 +29,21 @@ f .> g = \x -> g (f x)
 curry3 :: ((a, b, c) -> d) -> a -> b -> c -> d
 curry3 f a b c = f (a, b, c)
 uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
-uncurry3 = undefined
+uncurry3 f (a, b, c) = f a b c
 rotate :: (a -> b -> c -> d) -> c -> a -> b -> d
-rotate = undefined
+rotate f c a b = f a b c
 lotate :: (a -> b -> c -> d) -> b -> c -> a -> d
-lotate = undefined
+lotate f b c a = f a b c
 
 -- Generalizations of (.)
 (.:) :: (d -> e) -> (a -> b -> c -> d) -> a -> b -> c -> e
-(.:) = undefined
+(.:) f g a b c =  f (g a b c)
 (.:.) :: (e -> f) -> (a -> b -> c -> d -> e) -> a -> b -> c -> d -> f
-(.:.) = undefined
+(.:.) g h a b c d = g (h a b c d)
 (.::) :: (f -> g) -> (a -> b -> c -> d -> e -> f) -> a -> b -> c -> d -> e -> g
-(.::) = undefined
+(.::) h i a b c d e = h (i a b c d e) 
 (.::.) :: (g -> h) -> (a -> b -> c -> d -> e -> f -> g) -> a -> b -> c -> d -> e -> f -> h
-(.::.) = undefined
+(.::.) i j a b c d e f = i (j a b c d e f) 
 -- How can we ever implement such a function!?
 impossible :: a -> b
 impossible = undefined
