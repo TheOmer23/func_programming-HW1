@@ -54,6 +54,9 @@ impossible = undefined
 -- Section 2
 -- ********* 
 
+-- >>> fromBinary (-1010)
+-- -10
+
 countDigits :: Integer -> Integer
 countDigits a | a > 9 = 1 + countDigits(a `div` 10)
 countDigits a | a < 0 = 1 + countDigits((-a) `div` 10) 
@@ -63,10 +66,14 @@ toBinary :: Integer -> Integer
 toBinary 0 = 0
 toBinary 1 = 1
 toBinary a | a > 1 = toBinary(a `div` 2)*10 + (a `mod` 2)
---toBinary a | a < 0 = toBinary((-a)`div` 2)*10 + (a `mod` 2)
+toBinary a = (toBinary((-a)`div` 2)*10 + (a `mod` 2))*(-1)
 
 fromBinary :: Integer -> Integer
-fromBinary = undefined
+fromBinary 0 = 0
+fromBinary 1 = 1
+fromBinary a | a > 1 = fromBinary(a `div` 10)*2 + (a `mod` 2)
+fromBinary a = - fromBinary(-a)
+
 isAbundant :: Integer -> Bool
 isAbundant = undefined
 rotateDigits :: Integer -> Integer
