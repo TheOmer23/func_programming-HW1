@@ -8,6 +8,7 @@
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Avoid lambda" #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module HW1 where
 
@@ -74,8 +75,19 @@ fromBinary 1 = 1
 fromBinary a | a > 1 = fromBinary(a `div` 10)*2 + (a `mod` 2)
 fromBinary a = - fromBinary(-a)
 
+-- >>> isAbundant (12)
+
 isAbundant :: Integer -> Bool
-isAbundant = undefined
+isAbundant n
+  | n <= 0    = False  -- Return False for non-positive integers
+  | otherwise = sumOfDivisors (n - 1) 0 > n
+  where
+    sumOfDivisors :: Integer -> Integer -> Integer  
+    sumOfDivisors 0 sum = sum
+    sumOfDivisors a sum
+      | n `mod` a == 0 = sumOfDivisors (a - 1) (sum + a)
+      | otherwise      = sumOfDivisors (a - 1) sum
+
 rotateDigits :: Integer -> Integer
 rotateDigits = undefined
 -- ********* --
