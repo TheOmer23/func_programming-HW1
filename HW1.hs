@@ -13,6 +13,7 @@ module HW1 where
 
 -- These import statement ensures you aren't using any "advanced" functions and types, e.g., lists.
 import Prelude (Bool (..), Eq (..), Int, Integer, Num (..), Ord (..), div, error, even, flip, id, mod, not, otherwise, undefined, ($), (&&), (.), (||))
+import Data.ByteString (count)
 
 ------------------------------------------------
 -- DO NOT MODIFY ANYTHING ABOVE THIS LINE !!! --
@@ -22,6 +23,7 @@ import Prelude (Bool (..), Eq (..), Int, Integer, Num (..), Ord (..), div, error
 -- Section 1
 -- ********* --
 
+-- <stderr>: hPutChar: invalid argument (cannot encode character '\8226')
 const :: a -> b -> a
 const x _ = x
 (.>) :: (a -> b) -> (b -> c) -> a -> c
@@ -50,11 +52,19 @@ impossible = undefined
 
 -- ********* --
 -- Section 2
--- ********* --
+-- ********* 
+
 countDigits :: Integer -> Integer
-countDigits = undefined
+countDigits a | a > 9 = 1 + countDigits(a `div` 10)
+countDigits a | a < 0 = 1 + countDigits((-a) `div` 10) 
+countDigits _ = 1
+
 toBinary :: Integer -> Integer
-toBinary = undefined
+toBinary 0 = 0
+toBinary 1 = 1
+toBinary a | a > 1 = toBinary(a `div` 2)*10 + (a `mod` 2)
+--toBinary a | a < 0 = toBinary((-a)`div` 2)*10 + (a `mod` 2)
+
 fromBinary :: Integer -> Integer
 fromBinary = undefined
 isAbundant :: Integer -> Bool
