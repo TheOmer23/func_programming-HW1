@@ -159,7 +159,15 @@ isPrime n
       |  otherwise     = isDivisor  x (y-1) counter
 
 isSemiprime :: Integer -> Bool
-isSemiprime = undefined
+isSemiprime n = checkSemiprime n 2 0
+  where
+    checkSemiprime :: Integer -> Integer -> Integer -> Bool
+    checkSemiprime x i primeFactors
+      | x == 1                    = False
+      | primeFactors > 2          = False
+      | i * i > x                 = False
+      | x `mod` i == 0            = isPrime i && isPrime (x `div` i)
+      | otherwise                 = checkSemiprime x (i + 1) primeFactors
 goldbachPair :: Integer -> (Integer, Integer)
 goldbachPair = undefined
 goldbachPair' :: Integer -> (Integer, Integer)
