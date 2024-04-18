@@ -14,7 +14,7 @@ module HW1 where
 
 -- These import statement ensures you aren't using any "advanced" functions and types, e.g., lists.
 import Prelude (Bool (..), Eq (..), Int, Integer, Num (..), Ord (..), div, error, even, flip, id, mod, not, otherwise, undefined, ($), (&&), (.), (||))
-import Data.ByteString (count)
+import Data.ByteString (count, null)
 
 ------------------------------------------------
 -- DO NOT MODIFY ANYTHING ABOVE THIS LINE !!! --
@@ -53,9 +53,11 @@ impossible = undefined
 
 -- ********* --
 -- Section 2
--- ********* 
--- >>> countDigits 231
--- 3
+-- *********--
+
+-- >>> nullGen ((+1), (<0), 0)
+-- <stderr>: hPutChar: invalid argument (cannot encode character '\8226')
+
 
 -- >>> fromBinary (-1010)
 -- -10
@@ -107,28 +109,34 @@ powerN base exp
   | exp == 1 = base
   | otherwise = powerN base (exp-1) * base
 
-
-
 -- ********* --
 -- Section 3
 -- ********* --
+
 type Generator a = (a -> a, a -> Bool, a)
 nullGen :: Generator a -> Bool
-nullGen = undefined
+nullGen (_, p, a) = not (p a)
 lastGen :: Generator a -> a
-lastGen = undefined
+lastGen (f, p, a) = if nullGen (f, p, a) then a else lastGen (f, p, f a)
 lengthGen :: Generator a -> Int
-lengthGen = undefined
+lengthGen (f, p, a) = if nullGen (f, p, a) then 0 else 1 + lengthGen (f, p, f a)
 sumGen :: Generator Integer -> Integer
-sumGen = undefined
+sumGen (f, p, a) = if nullGen (f, p, a) then 0 else f a + sumGen (f, p, f a) 
 
 type Predicate a = a -> Bool
 anyGen :: Predicate a -> Generator a -> Bool
-anyGen = undefined
+anyGen q (f,p,a)
+  | nullGen (f,p,a) = False
+  | q (f a)         = True
+  | otherwise       = anyGen q (f,p,f a)
 allGen :: Predicate a -> Generator a -> Bool
-allGen = undefined
+allGen q (f,p,a)
+  | nullGen (f,p,a) = True
+  | not (q (f a))   = False
+  | otherwise       = allGen q (f,p,f a)
 noneGen :: Predicate a -> Generator a -> Bool
-noneGen = undefined
+noneGen q (f,p,a) = not (anyGen q (f,p,a)) 
+
 countGen :: Predicate a -> Generator a -> Int
 countGen = undefined
 
