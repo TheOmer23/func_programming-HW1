@@ -142,11 +142,22 @@ countGen q (f,p,a)
   | nullGen (f,p,a) = 0
   | q (f a)         = 1 + countGen q (f,p,f a)
   | otherwise       = countGen q (f,p,f a)
+
 -- ********* --
 -- Section 4
 -- ********* --
+
 isPrime :: Integer -> Bool
-isPrime = undefined
+isPrime n
+  | n < 2 = False 
+  | otherwise = isDivisor n (n-1) 0 == 0
+  where  
+    isDivisor :: Integer -> Integer -> Integer -> Integer
+    isDivisor _ 1 counter = counter
+    isDivisor x y counter
+      |  x `mod` y == 0 = isDivisor x (y-1) (counter+1)
+      |  otherwise     = isDivisor  x (y-1) counter
+
 isSemiprime :: Integer -> Bool
 isSemiprime = undefined
 goldbachPair :: Integer -> (Integer, Integer)
