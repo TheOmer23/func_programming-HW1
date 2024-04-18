@@ -138,8 +138,10 @@ noneGen :: Predicate a -> Generator a -> Bool
 noneGen q (f,p,a) = not (anyGen q (f,p,a)) 
 
 countGen :: Predicate a -> Generator a -> Int
-countGen = undefined
-
+countGen q (f,p,a) 
+  | nullGen (f,p,a) = 0
+  | q (f a)         = 1 + countGen q (f,p,f a)
+  | otherwise       = countGen q (f,p,f a)
 -- ********* --
 -- Section 4
 -- ********* --
