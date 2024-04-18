@@ -54,9 +54,17 @@ impossible = undefined
 -- ********* --
 -- Section 2
 -- ********* 
+-- >>> countDigits 231
+-- 3
 
 -- >>> fromBinary (-1010)
 -- -10
+
+-- >>> isAbundant 15
+-- False
+
+-- >>> rotateDigits 0
+-- 0
 
 countDigits :: Integer -> Integer
 countDigits a | a > 9 = 1 + countDigits(a `div` 10)
@@ -75,8 +83,6 @@ fromBinary 1 = 1
 fromBinary a | a > 1 = fromBinary(a `div` 10)*2 + (a `mod` 2)
 fromBinary a = - fromBinary(-a)
 
--- >>> isAbundant (12)
-
 isAbundant :: Integer -> Bool
 isAbundant n
   | n <= 0    = False  -- Return False for non-positive integers
@@ -89,7 +95,20 @@ isAbundant n
       | otherwise      = sumOfDivisors (a - 1) sum
 
 rotateDigits :: Integer -> Integer
-rotateDigits = undefined
+rotateDigits n 
+  | n < 0 = -(((-n) `div` 10) + ((- n) `mod` 10) * powerN 10 (countDigits n - 1))
+  | otherwise = (n - (n `div` powerN 10 (countDigits n - 1)) * powerN 10 (countDigits n - 1)) * 10 + (n `div` powerN 10 (countDigits n - 1))
+
+-- >>> powerN 2 8
+-- 256
+powerN :: Integer -> Integer -> Integer
+powerN base exp
+  | exp == 0 = 1
+  | exp == 1 = base
+  | otherwise = powerN base (exp-1) * base
+
+
+
 -- ********* --
 -- Section 3
 -- ********* --
