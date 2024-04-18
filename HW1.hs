@@ -55,18 +55,6 @@ impossible = undefined
 -- Section 2
 -- *********--
 
--- >>> nullGen ((+1), (<0), 0)
--- <stderr>: hPutChar: invalid argument (cannot encode character '\8226')
-
-
--- >>> fromBinary (-1010)
--- -10
-
--- >>> isAbundant 15
--- False
-
--- >>> rotateDigits 0
--- 0
 
 countDigits :: Integer -> Integer
 countDigits a | a > 9 = 1 + countDigits(a `div` 10)
@@ -168,14 +156,29 @@ isSemiprime n = checkSemiprime n 2 0
       | i * i > x                 = False
       | x `mod` i == 0            = isPrime i && isPrime (x `div` i)
       | otherwise                 = checkSemiprime x (i + 1) primeFactors
+
 goldbachPair :: Integer -> (Integer, Integer)
-goldbachPair = undefined
+goldbachPair n = checkAndFindPair n 2
+  where
+    checkAndFindPair :: Integer -> Integer -> (Integer, Integer)
+    checkAndFindPair m d
+      | isPrime d && isPrime(m - d) = (d, m - d)
+      | otherwise                   = checkAndFindPair m (d + 1)
+
 goldbachPair' :: Integer -> (Integer, Integer)
-goldbachPair' = undefined
+goldbachPair' n = findLargestPair n 2 (goldbachPair n)
+  where
+    findLargestPair :: Integer -> Integer -> (Integer, Integer) -> (Integer, Integer)
+    findLargestPair a b (c,d) 
+      | b == a = (c,d)
+      | isPrime b && isPrime(a - b) &&  ((a - b) * b) >= (c * d) = findLargestPair a (b + 1) (b, a-b)
+      | otherwise = findLargestPair a (b + 1) (c, d)
+
 
 -- ***** --
 -- Bonus
 -- ***** --
 isCircularPrime :: Integer -> Bool
 -- If you choose the implement this function, replace this with the actual implementation
+-- no thanks, I choose life <3
 isCircularPrime = undefined
